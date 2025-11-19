@@ -1,0 +1,27 @@
+# Build products
+build/
+DerivedData/
+
+# User-specific Xcode settings
+xcuserdata/
+*.xcuserstate
+*.xcscmblueprint
+*.xccheckout
+
+# Swift Package Manager
+.swiftpm/
+.build/
+Package.resolved
+
+# Swift Playgrounds
+timeline.xctimeline
+playground.xcworkspace
+
+# macOS / iOS system files
+.DS_Store
+
+# Logs & temporary files
+*.log
+*.tmp
+*.swp
+*.lock
