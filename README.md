@@ -2,6 +2,12 @@
 
 A macOS menu bar application for detecting posture changes with the use of accelerometer equipped AirPods.
 
+## Languages and frameworks
+
+- Swift
+- SwiftTesting
+- SwiftData
+
 ## Minimum viable product
 
 - Sniffer for Apple’s Core Motion headphone API (CMHeadphoneMotionManager)
