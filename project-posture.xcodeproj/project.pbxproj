@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		187868BC2ECE430B004717DC /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 187868BB2ECE4301004717DC /* README.md */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		187868742ECE3E68004717DC /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -28,6 +32,7 @@
 		187868732ECE3E68004717DC /* project-postureTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "project-postureTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1878687D2ECE3E68004717DC /* project-postureUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "project-postureUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		187868AC2ECE423F004717DC /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		187868BB2ECE4301004717DC /* README.md */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -44,6 +49,11 @@
 		187868802ECE3E68004717DC /* project-postureUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = "project-postureUITests";
+			sourceTree = "<group>";
+		};
+		187868BD2ECE432B004717DC /* .rhm */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = .rhm;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -76,6 +86,8 @@
 		1878685B2ECE3E66004717DC = {
 			isa = PBXGroup;
 			children = (
+				187868BD2ECE432B004717DC /* .rhm */,
+				187868BB2ECE4301004717DC /* README.md */,
 				187868AC2ECE423F004717DC /* .gitignore */,
 				187868662ECE3E67004717DC /* project-posture */,
 				187868762ECE3E68004717DC /* project-postureTests */,
@@ -111,6 +123,7 @@
 			);
 			fileSystemSynchronizedGroups = (
 				187868662ECE3E67004717DC /* project-posture */,
+				187868BD2ECE432B004717DC /* .rhm */,
 			);
 			name = "project-posture";
 			packageProductDependencies = (
@@ -238,6 +251,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				187868BC2ECE430B004717DC /* README.md in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
