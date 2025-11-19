@@ -22,10 +22,19 @@ struct project_postureApp: App {
             fatalError("Could not create ModelContainer: \(error)")
         }
     }()
+    
+    private var sniffer = HeadphoneMotionSniffer()
+    @NSApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
+
+    init() {
+        appDelegate.sniffer = sniffer
+        sniffer.startSniffing()
+    }
 
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(sniffer)
         }
         .modelContainer(sharedModelContainer)
     }
