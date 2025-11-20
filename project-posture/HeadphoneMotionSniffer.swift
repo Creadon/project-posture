@@ -11,6 +11,10 @@ final class HeadphoneMotionSniffer: ObservableObject {
     @Published var roll: Double = 0
     @Published var pitch: Double = 0
     @Published var yaw: Double = 0
+    
+    @Published var accelerationX: Double = 0
+    @Published var accelerationY: Double = 0
+    @Published var accelerationZ: Double = 0
 
     /// Starts listening for motion updates from connected AirPods.
     func startSniffing() {
@@ -38,14 +42,26 @@ final class HeadphoneMotionSniffer: ObservableObject {
             self.pitch = motion.attitude.pitch
             self.yaw = motion.attitude.yaw
             
+            self.accelerationX = motion.userAcceleration.x
+            self.accelerationY = motion.userAcceleration.y
+            self.accelerationZ = motion.userAcceleration.z
+            
             print("""
-            Attitude:
-              Roll: \(motion.attitude.roll)
-              Pitch: \(motion.attitude.pitch)
-              Yaw: \(motion.attitude.yaw)
-            Gravity: \(motion.gravity)
-            Rotation Rate: \(motion.rotationRate)
-            """)
+Attitude:
+    Roll:  \(String(format: "%.3f", motion.attitude.roll))
+    Pitch: \(String(format: "%.3f", motion.attitude.pitch))
+    Yaw:   \(String(format: "%.3f", motion.attitude.yaw))
+Gravity:
+    X:     \(String(format: "%.3f", motion.gravity.x))
+    Y:     \(String(format: "%.3f", motion.gravity.y))
+    Z:     \(String(format: "%.3f", motion.gravity.z))
+UserAcceleration:
+    X:     \(String(format: "%.3f", motion.userAcceleration.x))
+    Y:     \(String(format: "%.3f", motion.userAcceleration.y))
+    Z:     \(String(format: "%.3f", motion.userAcceleration.z))
+Sensor Location: \(motion.sensorLocation.rawValue == 1 ? "Left" : "Right")
+
+""")
         }
     }
 

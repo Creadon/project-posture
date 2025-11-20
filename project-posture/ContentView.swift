@@ -1,59 +1,102 @@
-//
-//  ContentView.swift
-//  project-posture
-//
-//  Created by Linus Sjunnesson on 2025-11-19.
-//
-
 import SwiftUI
-import SwiftData
 
 struct ContentView: View {
-    @Environment(\.modelContext) private var modelContext
-    @Query private var items: [Item]
+    @EnvironmentObject var sniffer: HeadphoneMotionSniffer
 
     var body: some View {
-        NavigationSplitView {
-            List {
-                ForEach(items) { item in
-                    NavigationLink {
-                        Text("Item at \(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))")
-                    } label: {
-                        Text(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))
-                    }
+        VStack(spacing: 24) {
+            Text("Headphone Motion Data")
+                .font(.title)
+                .fontWeight(.bold)
+                .padding(.top, 20)
+
+            HStack(alignment: .top, spacing: 24) {
+                // MARK: - Attitude Section
+                VStack(alignment: .leading, spacing: 12) {
+                    Text("Attitude (radians)")
+                        .font(.headline)
+
+                    attitudeRow(label: "Roll", value: sniffer.roll, color: .blue)
+                    attitudeRow(label: "Pitch", value: sniffer.pitch, color: .green)
+                    attitudeRow(label: "Yaw", value: sniffer.yaw, color: .orange)
                 }
-                .onDelete(perform: deleteItems)
-            }
-            .navigationSplitViewColumnWidth(min: 180, ideal: 200)
-            .toolbar {
-                ToolbarItem {
-                    Button(action: addItem) {
-                        Label("Add Item", systemImage: "plus")
-                    }
+                .padding()
+                .frame(maxWidth: .infinity)
+                .background(RoundedRectangle(cornerRadius: 12).fill(Color.gray.opacity(0.1)))
+
+                // MARK: - Acceleration Section
+                VStack(alignment: .leading, spacing: 12) {
+                    Text("User Acceleration (g)")
+                        .font(.headline)
+
+                    accelerationRow(label: "X", value: sniffer.accelerationX, color: .purple)
+                    accelerationRow(label: "Y", value: sniffer.accelerationY, color: .pink)
+                    accelerationRow(label: "Z", value: sniffer.accelerationZ, color: .red)
                 }
+                .padding()
+                .frame(maxWidth: .infinity)
+                .background(RoundedRectangle(cornerRadius: 12).fill(Color.gray.opacity(0.1)))
             }
-        } detail: {
-            Text("Select an item")
+            .padding(.horizontal)
+            .frame(maxWidth: 800)
+
+            Spacer()
+        }
+        .padding()
+    }
+
+    // MARK: - Subviews
+
+    private func attitudeRow(label: String, value: Double, color: Color) -> some View {
+        VStack(alignment: .leading) {
+            HStack {
+                Text("\(label):")
+                    .bold()
+                Spacer()
+                Text(String(format: "%.3f", value))
+                    .monospacedDigit()
+            }
+            Gauge(value: normalizedRadians(value), in: 0...1) {
+                Text(label)
+            } currentValueLabel: {
+                Text(String(format: "%.1f°", value * 180 / .pi))
+            }
+            .tint(color)
         }
     }
 
-    private func addItem() {
-        withAnimation {
-            let newItem = Item(timestamp: Date())
-            modelContext.insert(newItem)
+    private func accelerationRow(label: String, value: Double, color: Color) -> some View {
+        VStack(alignment: .leading) {
+            HStack {
+                Text("\(label):")
+                    .bold()
+                Spacer()
+                Text(String(format: "%.3f", value))
+                    .monospacedDigit()
+            }
+            Gauge(value: normalizedAcceleration(value), in: 0...1) {
+                Text(label)
+            } currentValueLabel: {
+                Text(String(format: "%.2f g", value))
+            }
+            .tint(color)
         }
     }
 
-    private func deleteItems(offsets: IndexSet) {
-        withAnimation {
-            for index in offsets {
-                modelContext.delete(items[index])
-            }
-        }
+    // MARK: - Normalization helpers
+
+    /// Converts a radian value (-π to π) to 0–1 range for the gauge
+    private func normalizedRadians(_ value: Double) -> Double {
+        (value + .pi) / (2 * .pi)
+    }
+
+    /// Converts an acceleration value (approx -1g to +1g) to 0–1 range for the gauge
+    private func normalizedAcceleration(_ value: Double) -> Double {
+        min(max((value + 1) / 2, 0), 1)
     }
 }
 
 #Preview {
     ContentView()
-        .modelContainer(for: Item.self, inMemory: true)
+        .environmentObject(HeadphoneMotionSniffer())
 }
