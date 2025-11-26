@@ -1,7 +1,7 @@
 import SwiftUI
 
-struct ContentView: View {
-    @EnvironmentObject var sniffer: HeadphoneMotionSniffer
+struct ContentView<Sniffer: MotionSnifferProtocol>: View {
+    @EnvironmentObject var sniffer: Sniffer
 
     var body: some View {
         VStack(spacing: 24) {
@@ -97,6 +97,6 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView()
-        .environmentObject(HeadphoneMotionSniffer())
+    ContentView<MockMotionSniffer>()
+        .environmentObject(MockMotionSniffer())
 }

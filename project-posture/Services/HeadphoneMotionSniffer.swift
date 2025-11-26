@@ -1,12 +1,15 @@
 import Foundation
 import CoreMotion
 import Combine
+import SwiftData
 
 
 /// A simple class that listens to motion updates from AirPods (or any headphone device supporting motion data).
-final class HeadphoneMotionSniffer: ObservableObject {
+final class HeadphoneMotionSniffer: MotionSnifferProtocol {
     private let motionManager = CMHeadphoneMotionManager()
     private var isListening = false
+    
+    private let context: ModelContext
     
     @Published var roll: Double = 0
     @Published var pitch: Double = 0
@@ -15,7 +18,25 @@ final class HeadphoneMotionSniffer: ObservableObject {
     @Published var accelerationX: Double = 0
     @Published var accelerationY: Double = 0
     @Published var accelerationZ: Double = 0
+    
+    init(context: ModelContext) {
+        self.context = context
+    }
 
+    private func saveMotion(_ motion: CMDeviceMotion) {
+        let sample = MotionSample(
+            timestamp: .now,
+            roll: motion.attitude.roll,
+            pitch: motion.attitude.pitch,
+            yaw: motion.attitude.yaw,
+            accelerationX: motion.userAcceleration.x,
+            accelerationY: motion.userAcceleration.y,
+            accelerationZ: motion.userAcceleration.z
+        )
+        context.insert(sample)
+        try? context.save()
+    }
+    
     /// Starts listening for motion updates from connected AirPods.
     func startSniffing() {
         guard motionManager.isDeviceMotionAvailable else {
@@ -62,6 +83,7 @@ UserAcceleration:
 Sensor Location: \(motion.sensorLocation.rawValue == 1 ? "Left" : "Right")
 
 """)
+            saveMotion(motion)
         }
     }
 
